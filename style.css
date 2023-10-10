@@ -1,0 +1,26 @@
+* {
+    box-sizing: border-box;
+}
+
+#labyrinthe {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cases {
+    background-color: black;
+    width: 100px;
+    height: 100px;
+}
+
+.start{
+    background-image: url("https://stickeramoi.com/17832-large_default/sticker-circuit-drapeau-damier.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+.exit{
+    background-image: url("https://cdn.pixabay.com/photo/2021/11/06/16/57/emergency-exit-6773807_640.png");
+    background-repeat: no-repeat;
+    background-size: 100%;
+}

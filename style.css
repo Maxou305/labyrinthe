@@ -7,20 +7,36 @@
     flex-wrap: wrap;
 }
 
-.cases {
+.case {
     background-color: black;
     width: 100px;
     height: 100px;
 }
 
 .start{
-    background-image: url("https://stickeramoi.com/17832-large_default/sticker-circuit-drapeau-damier.jpg");
+    background-image: url("https://cdns-images.dzcdn.net/images/artist/f81e9d3704b453c60ba75289954826cc/500x500.jpg");
     background-repeat: no-repeat;
     background-size: 100%;
 }
 
 .exit{
-    background-image: url("https://cdn.pixabay.com/photo/2021/11/06/16/57/emergency-exit-6773807_640.png");
+    background-image: url("https://previews.123rf.com/images/memoangeles/memoangeles1606/memoangeles160600008/59922290-maman-inquiet-clipart-illustration-avec-des-d%C3%A9grad%C3%A9s-simples-maman-et-la-sueur-sur-des-calques.jpg");
     background-repeat: no-repeat;
     background-size: 100%;
+}
+
+p{
+    color: blue;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+img{
+    width: 98px;
 }

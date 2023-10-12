@@ -6,12 +6,15 @@ class Labyrinthe {
             let cell = new Case(data[size][difficulty][i])
             this.cells.push(cell)
         }
+        this.posPlayerX = 0
+        this.posPlayerY = 0
+        this.waitingList = []
     }
     initLabyrinthe() {
         let lab = $("<div></div>").attr("id", "labyrinthe")
         lab.css("width", this.size * 100)
         for (let c of this.cells) {
-            let cases = $("<div></div>").addClass("cases")
+            let cases = $("<div></div>").addClass("case").attr("id", c.posX + "-" + c.posY)
             if (c.details.entrance) {
                 cases.addClass("start")
             }
@@ -31,54 +34,78 @@ class Labyrinthe {
                 cases.css("border-left", "solid red 1px")
             }
             lab.append(cases)
+
         }
         $("body").append(lab)
     }
-    getStart(){
-        return this.cells.find(cell => cell.details.entrance);
+    getStart() {
+        let start = this.cells.find(cell => cell.details.entrance);
+        start.visited = true
+        return start
     }
-    getExit(){
+    getExit() {
         return this.cells.find(cell => cell.details.exit);
     }
-    getPosition(x, y){
+    getPosition(x, y) {
         return this.cells.find(element => element.posX === x && element.posY === y);
     }
-    getUnvisitedNeighbors(cell){
+    getUnvisitedNeighbors(cell) {
         console.log('Infos disponibles')
-        console.log('posX', cell.posX)
-        console.log('posY', cell.posY)
-        console.log('walls', cell.walls)
-        console.log('visited', cell.visited)
-
-        let neighbors = []
-        if (!cell.walls[0]){
-            neighbors.push(this.getPosition(cell.posX-1, cell.posY)); 
+        console.log('cell"s walls :', cell.walls)
+        console.log('actual cell visited :', cell.visited)
+        if (!cell.walls[0] && !this.getPosition(cell.posX - 1, cell.posY).visited) {
+            this.waitingList.push(this.getPosition(cell.posX - 1, cell.posY));
         }
-        if (!cell.walls[1]){
-            neighbors.push(this.getPosition(cell.posX, cell.posY+1)); 
+        if (!cell.walls[1] && !this.getPosition(cell.posX, cell.posY + 1).visited) {
+            this.waitingList.push(this.getPosition(cell.posX, cell.posY + 1));
         }
-        if (!cell.walls[2]){
-            neighbors.push(this.getPosition(cell.posX+1, cell.posY)); 
+        if (!cell.walls[2] && !this.getPosition(cell.posX + 1, cell.posY).visited) {
+            this.waitingList.push(this.getPosition(cell.posX + 1, cell.posY));
         }
-        if (!cell.walls[3]){
-            neighbors.push(this.getPosition(cell.posX, cell.posY-1)); 
+        if (!cell.walls[3] && !this.getPosition(cell.posX, cell.posY - 1).visited) {
+            this.waitingList.push(this.getPosition(cell.posX, cell.posY - 1));
         }
-        return neighbors
+        console.log("waiting list : ", this.waitingList)
     }
-    setPlayer(){
+    setPlayer() {
         this.posPlayerX = this.getStart().posX
         this.posPlayerY = this.getStart().posY
     }
-    movePlayer(){
-
+    displayPlayer(){
+        let pion = document.createElement("img")
+        $(pion).attr("src", "https://png.pngtree.com/png-clipart/20220124/ourlarge/pngtree-hand-drawn-cartoon-earthquake-characters-fear-elements-png-image_4261505.png")
+        document.getElementById(this.posPlayerX + "-" + this.posPlayerY).append(pion)
+    }
+    erasePlayer(){
+        document.getElementById(this.posPlayerX + "-" + this.posPlayerY).setHTML("")
+    }
+    pingVisited(){
+        let t = this.cells.find(element => element.posX === this.posPlayerX && element.posY === this.posPlayerY);
+        return t.visited = true
+    }
+    movePlayer() {
+        this.getUnvisitedNeighbors(this.getPosition(this.posPlayerX, this.posPlayerY))
+        this.posPlayerX = this.waitingList[this.waitingList.length-1].posX
+        this.posPlayerY = this.waitingList[this.waitingList.length-1].posY
+        this.pingVisited()
+        let posAfterMove = this.cells.find(element => element.posX === this.posPlayerX && element.posY === this.posPlayerY)
+        posAfterMove
+        console.log("cell after move : ", posAfterMove)
+        this.waitingList.pop()
+        console.log("player position after move : ", this.posPlayerX, this.posPlayerY)
+        console.log("----------------------------------------------")
     }
     solve() {
-        // if (posPlayerX != getExit(laby).posX && posPlayerY != getExit(laby).posY) {
-        //     this.isVisited()
-        //     this.isCroisement()
-        //     if(isWalls(getPosition()) === false && checkVisited() === false){
-        //         movePlayer()
-        //     }
+        // while(!(this.posPlayerX === this.getExit().posX && this.posPlayerY === this.getExit().posY)){
+        //     this.erasePlayer()
+        //     this.movePlayer()
+        //     this.displayPlayer()
         // }
+        if(!(this.posPlayerX === this.getExit().posX && this.posPlayerY === this.getExit().posY)){
+            this.erasePlayer()
+            this.movePlayer()
+            this.displayPlayer()
+        }
+        else{console.log("BRAVO T'ES SORTI !!!!!!!!!")}
     }
 }

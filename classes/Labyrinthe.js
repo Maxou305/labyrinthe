@@ -11,6 +11,7 @@ class Labyrinthe {
         this.waitingList = []
     }
     initLabyrinthe() {
+        // créa du laby au niveau du DOM
         let lab = $("<div></div>").attr("id", "labyrinthe")
         lab.css("width", this.size * 100)
         for (let c of this.cells) {
@@ -49,21 +50,39 @@ class Labyrinthe {
     getPosition(x, y) {
         return this.cells.find(element => element.posX === x && element.posY === y);
     }
-    getUnvisitedNeighbors(cell) {
+    // getUnvisitedNeighbors(cell) { // DFS
+    //     console.log('Infos disponibles')
+    //     console.log('cell"s walls :', cell.walls)
+    //     console.log('actual cell visited :', cell.visited)
+    //     if (!cell.walls[0] && !this.getPosition(cell.posX - 1, cell.posY).visited) {
+    //         this.waitingList.push(this.getPosition(cell.posX - 1, cell.posY));
+    //     }
+    //     if (!cell.walls[1] && !this.getPosition(cell.posX, cell.posY + 1).visited) {
+    //         this.waitingList.push(this.getPosition(cell.posX, cell.posY + 1));
+    //     }
+    //     if (!cell.walls[2] && !this.getPosition(cell.posX + 1, cell.posY).visited) {
+    //         this.waitingList.push(this.getPosition(cell.posX + 1, cell.posY));
+    //     }
+    //     if (!cell.walls[3] && !this.getPosition(cell.posX, cell.posY - 1).visited) {
+    //         this.waitingList.push(this.getPosition(cell.posX, cell.posY - 1));
+    //     }
+    //     console.log("waiting list : ", this.waitingList)
+    // }
+    getUnvisitedNeighbors(cell) { // BFS
         console.log('Infos disponibles')
         console.log('cell"s walls :', cell.walls)
         console.log('actual cell visited :', cell.visited)
         if (!cell.walls[0] && !this.getPosition(cell.posX - 1, cell.posY).visited) {
-            this.waitingList.push(this.getPosition(cell.posX - 1, cell.posY));
+            this.waitingList.unshift(this.getPosition(cell.posX - 1, cell.posY));
         }
         if (!cell.walls[1] && !this.getPosition(cell.posX, cell.posY + 1).visited) {
-            this.waitingList.push(this.getPosition(cell.posX, cell.posY + 1));
+            this.waitingList.unshift(this.getPosition(cell.posX, cell.posY + 1));
         }
         if (!cell.walls[2] && !this.getPosition(cell.posX + 1, cell.posY).visited) {
-            this.waitingList.push(this.getPosition(cell.posX + 1, cell.posY));
+            this.waitingList.unshift(this.getPosition(cell.posX + 1, cell.posY));
         }
         if (!cell.walls[3] && !this.getPosition(cell.posX, cell.posY - 1).visited) {
-            this.waitingList.push(this.getPosition(cell.posX, cell.posY - 1));
+            this.waitingList.unshift(this.getPosition(cell.posX, cell.posY - 1));
         }
         console.log("waiting list : ", this.waitingList)
     }
@@ -84,13 +103,14 @@ class Labyrinthe {
         return t.visited = true
     }
     movePlayer() {
+         // recherche les voisins non visités de la case où le joueur se situe
         this.getUnvisitedNeighbors(this.getPosition(this.posPlayerX, this.posPlayerY))
+        // get des nouvelles coordonnées du joueur
         this.posPlayerX = this.waitingList[this.waitingList.length-1].posX
         this.posPlayerY = this.waitingList[this.waitingList.length-1].posY
+        // ping de la case visitée
         this.pingVisited()
-        let posAfterMove = this.cells.find(element => element.posX === this.posPlayerX && element.posY === this.posPlayerY)
-        posAfterMove
-        console.log("cell after move : ", posAfterMove)
+        // pop de la waiting list de la case visitée
         this.waitingList.pop()
         console.log("player position after move : ", this.posPlayerX, this.posPlayerY)
         console.log("----------------------------------------------")
@@ -106,6 +126,6 @@ class Labyrinthe {
             this.movePlayer()
             this.displayPlayer()
         }
-        else{console.log("BRAVO T'ES SORTI !!!!!!!!!")}
+        else{alert("BRAVO T'ES SORTI !!!!!!!!!")}
     }
 }

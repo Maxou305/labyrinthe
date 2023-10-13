@@ -1,17 +1,10 @@
 
 
-let laby = new Labyrinthe("25", "ex-0")
+let laby = new Labyrinthe("21", "ex-0")
 laby.initLabyrinthe()
 laby.setPlayer()
 
-
 $("body").on("click", () => laby.solve());
-
-
-
-
-
-
 
 // ----------------- console log ----------------- 
 console.log("labyrinthe : ", laby)

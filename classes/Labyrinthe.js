@@ -57,7 +57,7 @@ class Labyrinthe {
     getPosition(x, y) {
         return this.cells.find(element => element.posX === x && element.posY === y);
     }
-    getUnvisitedNeighbors(cell) {
+    getUnvisitedNeighbors(cell) { // mode BFS, pour passer en DFS remplacer ".push" des lignes 64, 67, 70, 73 par ".unshift"
         console.log('Infos disponibles')
         console.log('cell"s walls :', cell.walls)
         if (!cell.walls[0] && !this.getPosition(cell.posX - 1, cell.posY).visited) {
